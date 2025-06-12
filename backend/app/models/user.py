@@ -27,3 +27,4 @@ class User(Base):
 
     role_id = Column(UUID(as_uuid=True), ForeignKey("roles.id"))
     role = relationship("Role", back_populates="users")
+    permissions = relationship("UserPermission",back_populates="user")

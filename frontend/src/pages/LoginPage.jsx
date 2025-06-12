@@ -1,110 +1,91 @@
-import { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import {
+  MDBBtn,
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBInput
+} from 'mdb-react-ui-kit';
+import axios from 'axios';
 
-const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [message, setMessage] = useState(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-        console.log("Sending login request",{
-            email,
-            password
-        });
-        const res = await axios.post("http://localhost:8000/auth/login", {
-        email,
+      const res = await axios.post('http://localhost:8000/auth/login', {
+        email: email.toLowerCase().trim(),
         password,
       });
-
-      const token = res.data.access_token;
-      localStorage.setItem("token", token);
-      setMessage("✅ ورود موفق بود!");
+      localStorage.setItem('token', res.data.access_token);
+      setMessage("✅ Login successful!");
       window.location.href = "/dashboard";
     } catch (err) {
-      setMessage("❌ ایمیل یا رمز عبور اشتباه است.");
+      setMessage("❌ Email or password incorrect.");
     }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <img src="/logo.png" alt="Logo" style={styles.logo} />
-        <h2 style={styles.title}>ورود به Part Group</h2>
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="ایمیل"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={styles.input}
+    <MDBContainer
+      fluid
+      className="min-vh-100 d-flex justify-content-center align-items-center"
+      style={{ background: "radial-gradient(circle at center, #1c1c1c, #0f0f0f 90%)" }}
+    >
+      <MDBCard style={{ width: '100%', maxWidth: '420px', borderRadius: '1rem', backgroundColor: '#2c2c2c' }} className="text-white p-4 shadow-lg">
+        <MDBCardBody className="text-center">
+
+          {/* لوگو بالا */}
+          <img
+            src="/logo.png"
+            alt="Part Group Logo"
+            style={{ width: '100px', marginBottom: '1rem' }}
           />
-          <input
-            type="password"
-            placeholder="رمز عبور"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <button type="submit" style={styles.button}>ورود</button>
-        </form>
-        {message && <p style={styles.msg}>{message}</p>}
-      </div>
-    </div>
+
+          <h2 className='fw-bold mb-3'>Login</h2>
+          <p className='text-white-50 mb-4'>Please enter your login and password</p>
+
+          <form onSubmit={handleLogin}>
+            <MDBInput
+              label="Email"
+              
+              type="email"
+              className="mb-4"
+              size="lg"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              
+            />
+
+            <MDBInput
+              label="Password"
+              type="password"
+              className="mb-4"
+              size="lg"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              
+            />
+
+            <div className='text-end mb-3'>
+              <a href='#!' className='text-white-50 small'>Forgot password?</a>
+            </div>
+
+            <div className='d-grid'>
+              <MDBBtn type='submit' color='warning' size='lg'>
+                LOGIN
+              </MDBBtn>
+            </div>
+          </form>
+
+          {message && <p className="text-danger mt-4 mb-0">{message}</p>}
+
+        </MDBCardBody>
+      </MDBCard>
+    </MDBContainer>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: "100vh",
-    background: "#0d0d0d",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  card: {
-    background: "#1e1e1e",
-    padding: 30,
-    borderRadius: 20,
-    width: 320,
-    textAlign: "center",
-    color: "#fff",
-    boxShadow: "0 0 10px rgba(255,102,0,0.5)",
-  },
-  logo: {
-    width: 80,
-    marginBottom: 20,
-  },
-  title: {
-    marginBottom: 20,
-    color: "#ffa500",
-  },
-  input: {
-    width: "100%",
-    padding: 12,
-    marginBottom: 15,
-    borderRadius: 10,
-    border: "none",
-    outline: "none",
-    fontSize: 16,
-  },
-  button: {
-    width: "100%",
-    padding: 12,
-    background: "#ffa500",
-    border: "none",
-    borderRadius: 10,
-    color: "#fff",
-    fontSize: 16,
-    cursor: "pointer",
-  },
-  msg: {
-    marginTop: 15,
-    color: "#ff4444",
-  },
-};
-
-export default LoginPage;
+}
