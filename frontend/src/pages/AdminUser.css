@@ -1,0 +1,145 @@
+/* UserManagementPage.css */
+.user-page-container {
+    width: 100vw;
+  height: 100vh;
+  display: flex;
+  min-height: 100vh;
+  font-family: sans-serif;
+  
+  color: #2d3748;
+}
+
+.user-sidebar {
+  width: 240px;
+  background-color: #f9fafb;
+  border-right: 1px solid #e5e7eb;
+  padding: 1rem;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-item.active {
+  background-color: #e5e7eb;
+}
+
+.sidebar-item:hover {
+  background-color: #f3f4f6;
+}
+
+.dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.dot.gray {
+  background-color: #ff9800;
+}
+
+.dot.light {
+  background-color: #cbd5e0;
+}
+
+.user-main {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+.user-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.25rem;
+}
+
+.layout-buttons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.search-box {
+  margin-bottom: 1rem;
+}
+
+.search-input-wrapper {
+  position: relative;
+  max-width: 400px;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.6rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #ff9800;
+}
+
+.error-message {
+  color: #e53e3e;
+  margin-bottom: 1rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.user-table thead {
+  font-size: 0.875rem;
+  color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.user-table tbody tr {
+  border-bottom: 1px solid #edf2f7;
+}
+
+.user-table tbody tr:hover {
+  background-color: #f7fafc;
+}
+
+.user-table td,
+.user-table th {
+  padding: 0.75rem 0.5rem;
+}

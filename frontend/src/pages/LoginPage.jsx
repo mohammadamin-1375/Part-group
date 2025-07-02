@@ -21,6 +21,7 @@ export default function LoginPage() {
         password,
       });
       localStorage.setItem('token', res.data.access_token);
+      localStorage.setItem('user_id', res.data.user.id);
       setMessage("✅ Login successful!");
       window.location.href = "/dashboard";
     } catch (err) {

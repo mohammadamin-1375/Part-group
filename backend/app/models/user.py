@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
 from datetime import datetime
-
+from app.models.user_permission import UserPermission
 from app.db.database import Base
 
 class Role(Base):
@@ -13,7 +13,6 @@ class Role(Base):
     name = Column(String, unique=True, nullable=False)
 
     users = relationship("User", back_populates="role")
-
 
 class User(Base):
     __tablename__ = "users"
@@ -27,4 +26,7 @@ class User(Base):
 
     role_id = Column(UUID(as_uuid=True), ForeignKey("roles.id"))
     role = relationship("Role", back_populates="users")
-    permissions = relationship("UserPermission",back_populates="user")
+
+    permissions = relationship("UserPermission", back_populates="user")
+    chat_rooms = relationship("ChatRoomMember", back_populates="user", cascade="all, delete")
+    message_sent = relationship("Message", back_populates="sender", cascade="all, delete")

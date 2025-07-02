@@ -46,6 +46,11 @@ def authenticate_user(db: Session, email: str, password: str):
     # ساخت توکن JWT
     access_token = create_access_token(data={"sub": user.email})
     return {
-        "access_token": access_token,
-        "token_type": "bearer"
+         "access_token": access_token,
+        "token_type": "bearer",
+        "user": {
+            "id": str(user.id),
+            "username": user.username,
+            "email": user.email
+            }
     }

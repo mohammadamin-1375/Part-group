@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routes import auth, role, user
+from app.routes import auth, role, user , chat , websocket
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Part Chat Massenger" , debug=True)
@@ -17,6 +17,8 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(role.router)
 app.include_router(user.router)
+app.include_router(chat.router)
+app.include_router(websocket.router)
 
 @app.get("/")
 def read_root():
