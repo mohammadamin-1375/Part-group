@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./ChatSidebar.css";
 import { FaUser, FaUsers } from "react-icons/fa";
 import axios from "axios";
+import UserList from "./UserList";
 
 export default function ChatSidebar({ onSelectChat }) {
   const [privateChats, setPrivateChats] = useState([]);
   const [groupChats, setGroupChats] = useState([]);
   const [loading, setLoading] = useState(true);
+  const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const userId = localStorage.getItem("user_id");
         const privateRes = await axios.get(`http://localhost:8000/chat/private?user_id=${userId}`, {
         withCredentials: true,});
         const groupRes = await axios.get("http://localhost:8000/chat/group", {
@@ -26,12 +27,22 @@ export default function ChatSidebar({ onSelectChat }) {
       }
     };
     fetchChats();
-  }, []);
+  }, [userId]);
+
+
+  const handleNewPrivateChat =(chat)=>{
+    const exists = privateChats.some((c) => c.id === chat.id);
+    if (!exists){
+      setPrivateChats((prev) => [...prev, chat]);
+    }
+  };
 
   return (
     <div className="chat-sidebar">
       <h2 className="sidebar-title">Part Group</h2>
       {loading && <p className="loading">Loading chats...</p>}
+
+      <UserList onPrivateChatCreated={handleNewPrivateChat} />
 
       <div className="chat-section">
         <h3 className="section-title">

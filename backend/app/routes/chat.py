@@ -8,6 +8,8 @@ from app.schemas.chat import (
     ChatRoomMemberResponse ,MessageCreate,MessageResponse
 )
 from datetime import datetime
+from app.dependencies.auth import get_current_user
+from app.models.user import User
 
 router = APIRouter(prefix = "/chat" , tags=["Chat"])
 def get_db():
@@ -68,7 +70,7 @@ def add_member_to_group(data:ChatRoomMemberCreate , db:Session=Depends(get_db)):
 
 #send chat
 @router.post("/send-message", response_model=MessageResponse)
-def send_message(data: MessageCreate, db: Session = Depends(get_db)):
+def send_message(data: MessageCreate, db: Session = Depends(get_db), current_user:User=Depends(get_current_user)):
     if not data.private_chat_id and not data.chat_room_id:
         raise HTTPException(status_code=400, detail="Either private_chat_id or chat_room_id must be provided.")
 
@@ -78,7 +80,7 @@ def send_message(data: MessageCreate, db: Session = Depends(get_db)):
         media_url=data.media_url,
         private_chat_id=data.private_chat_id,
         chat_room_id=data.chat_room_id,
-        sender_id=data.sender_id, 
+        sender_id=str(current_user.id), 
         content_at=datetime.utcnow()
     )
     db.add(msg)
@@ -103,3 +105,6 @@ def get_all_private_chats(user_id: str, db: Session = Depends(get_db)):
         (PrivateChat.user1_id == user_id) | (PrivateChat.user2_id == user_id)
     ).all()
     return chats
+@router.get("/group", response_model=list[ChatRoomResponse])
+def get_all_chat_rooms(db: Session = Depends(get_db)):
+    return db.query(ChatRoom).all()

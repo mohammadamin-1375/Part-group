@@ -14,8 +14,8 @@ def get_db():
         yield db
     finally:
         db.close()
-# viwe list user for Admin
-@router.get("/",dependencies=[Depends(require_admin)])
+# viwe list user for Admin ,dependencies=[Depends(require_admin)]
+@router.get("/")
 def list_user(db: Session =Depends(get_db)):
     users = db.query(User).all()
     result=[]

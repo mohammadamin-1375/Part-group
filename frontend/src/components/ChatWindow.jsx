@@ -37,7 +37,6 @@ export default function ChatWindow({ chat, chatType }) {
     await sendMessage({
       content: newMessage,
       private_chat_id: chat.id,
-      sender_id: userId,
     });
     setNewMessage("");
   };

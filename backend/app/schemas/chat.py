@@ -17,7 +17,7 @@ class MessageCreate(MessageBase):
 class MessageResponse(MessageBase):
     id: str
     sender_id: str
-    created_at: datetime
+    content_at: datetime
 
     class Config:
         orm_mode = True

@@ -1,36 +1,60 @@
-import React,{useEffect,useState} from "react";
-import { createPrivateChat } from "../../services/chatService";
-import { getUsers } from "../../services/userService";
+// UserList.jsx
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./UserList.css"; // استایل جدا برای زیبایی بیشتر
 
-const UserList = ({currentUserId,onChatCreated}) => {
-    const [users,setUsers]=useState([]);
-    useEffect(()=> {
-        getUsers().then(setUsers);
-    },[]);
+export default function UserList({ onPrivateChatCreated }) {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const currentUserId = localStorage.getItem("user_id");
 
-    const handleStartChat =async(targetUserId)=>{
-        try{
-            const result =await createPrivateChat(currentUserId,targetUserId);
-            onChatCreated(result.id);
-        }catch(error){
-            console.error("Error creating chat:",error);
-        }
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/users/", {
+          withCredentials: true,
+        });
+        setUsers(res.data.filter((u) => u.id !== currentUserId)); // خودت حذف
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to load users:", error);
+        setLoading(false);
+      }
     };
+    fetchUsers();
+  }, [currentUserId]);
 
-    return(
-        <div className="user-list">
-            <h3>Select a user to start a chat:</h3>
-            {users.filter((u)=>u.id !==currentUserId).map((user)=> (
-                <div
-                key={user.id}
-                onClick={()=>handleStartChat(user.id)}
-                className="user-item"
-                >
-                    {user.usename}
-                </div>
-            ))}
+  const handleStartChat = async (targetUserId) => {
+    try {
+      const res = await axios.post("http://localhost:8000/chat/private", {
+        user1_id: currentUserId,
+        user2_id: targetUserId,
+      }, {
+        withCredentials: true,
+      });
+
+      onPrivateChatCreated(res.data);
+    } catch (error) {
+      console.error("Failed to start chat:", error);
+    }
+  };
+
+  if (loading) return <p>Loading users...</p>;
+
+  return (
+    <div className="user-list">
+      <h3 className="section-title">Start Chat</h3>
+      {users.map((user) => (
+        <div key={user.id} className="chat-item">
+          <div className="chat-name">{user.username}</div>
+          <button
+            className="start-chat-button"
+            onClick={() => handleStartChat(user.id)}
+          >
+            Start Chat
+          </button>
         </div>
-    );
-};
-
-export default UserList;
+      ))}
+    </div>
+  );
+}

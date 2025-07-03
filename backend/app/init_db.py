@@ -4,5 +4,6 @@ from app.models.permission import Permission
 from app.models.user_permission import UserPermission
 
 
+
 Base.metadata.create_all(bind=engine)
 print("Database tables created.")

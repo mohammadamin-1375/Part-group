@@ -17,7 +17,13 @@ export const fetchGroupMessages = async (roomId) => {
 };
 
 export const sendMessage = async (messageData) => {
-  const res = await axios.post(`${BASE_URL}/send-message`, messageData, {
+  const token = localStorage.getItem("token");
+
+  const res = await axios.post(`${BASE_URL}/send-message`, messageData, 
+    {
+      headers: {
+        Authorization:`Bearer ${token}`,
+      },
     withCredentials: true,
   });
   return res.data;
